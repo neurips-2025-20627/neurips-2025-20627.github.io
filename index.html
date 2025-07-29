@@ -8,7 +8,6 @@
     <meta name="keywords" content="SupPhysField, 3D Physics, CLIP, Gaussian Splatting, MPM, Computer Graphics, NeRF" />
     <title>SupPhysField: 3D Physics from Pixels</title>
 
-    <!-- FONTS & ICONS -->
     <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet" />
     <link rel="stylesheet" href="./static/css/bulma.min.css" />
     <link rel="stylesheet" href="./static/css/bulma-carousel.min.css" />
@@ -251,9 +250,9 @@
         <a href="#dataset" class="dot" title="Dataset"></a>
         <a href="#method" class="dot" title="Method"></a>
         <a href="#results" class="dot" title="Results"></a>
-        <!-- <a href="#real" class="dot" title="Real-world"></a>
-    <a href="#ablation" class="dot" title="Ablation"></a>
-    <a href="#authors" class="dot" title="Authors"></a> -->
+        <a href="#real" class="dot" title="Real-world"></a>
+        <a href="#ablation" class="dot" title="Ablation"></a>
+        <a href="#appendix" class="dot" title="Appendix"></a>
     </div>
 
     <!-- ──────────  HERO / TEASER  (UMI-on-legs template style)  ────────── -->
@@ -321,9 +320,9 @@
                     <li><a href="#dataset">SupPhysVerse Dataset</a></li>
                     <li><a href="#method">Method</a></li>
                     <li><a href="#results">Results</a></li>
-                    <!-- <li><a href="#real">Real-world</a></li>
-          <li><a href="#ablation">Ablation</a></li> -->
-                    <!-- <li><a href="#citation">Citation</a></li> -->
+                    <li><a href="#real">Real-world</a></li>
+                    <li><a href="#ablation">Ablation</a></li>
+                    <li><a href="#ablation">Appendix</a></li>
                 </ul>
             </nav>
         </div>
@@ -474,7 +473,8 @@
                 reference videos in
                 SupPhysVerse, the VLM Gemini scores, and five other metrics our
                 method optimizes including discrete material accuracy and continuous errors over E, ν, ρ. Standard
-                errors and 95% CI are also included, and best values are <strong>bolded</strong>. SupPhysField is by far the best
+                errors and 95% CI are also included, and best values are <strong>bolded</strong>. SupPhysField is by far
+                the best
                 performer.
                 2.21-4.58x improvement in VLM score and 3.6-30.3% gains in PSNR and SSIM against competitors!
             </figure>
@@ -599,6 +599,202 @@
         </div>
     </section>
 
+
+    <!-- ──────────  APPENDIX  ────────── -->
+    <section id="appendix" class="section is-medium has-background-light">
+        <div class="container is-max-desktop">
+            <h2 class="title is-2 has-text-centered">Appendix</h2>
+
+
+
+            <!-- ================  APPENDIX B  ================ -->
+            <div id="app-b">
+                <h3 class="title is-3">B&nbsp;&nbsp;SupPhysVerse&nbsp;Dataset Details</h3>
+                <p class="content is-size-5 has-text-justified">
+                    We curate <strong>1 624</strong> single‑object assets drawn from Objaverse with a multi‑stage,
+                    vision‑language–driven pipeline that removes low‐quality scenes, duplicates and ambiguous
+                    materials, then annotates each asset with dense physical parameters (material ID,
+                    Young’s E, Poisson ν and density). The full procedure—including keyword matching,
+                    Gemini‑based quality filtering and an actor‑critic loop for CLIP segmentation—is described in
+                    the paper’s Appendix B. Key stages are illustrated below.
+                </p>
+
+                <figure class="image is-fullwidth">
+                    <img src="static/images/appendix/dataset_blender.png" alt="Dataset examples">
+                    <figcaption class="has-text-centered">Figure 10 – SupPhysVerse class coverage overview.</figcaption>
+                </figure>
+
+                <figure class="image is-fullwidth">
+                    <img src="static/images/appendix/web_interface1.png" alt="Filtering web UI mock‑up">
+                    <img src="static/images/appendix/web_interface2.png" alt="Filtering web UI mock‑up">
+                    <figcaption class="has-text-centered">Figure 12 – Manual correction interface used to vet Gemini
+                        decisions.</figcaption>
+                </figure>
+
+                <figure class="image is-fullwidth">
+                    <img src="static/images/appendix/bc826f1f48e744438cb9a37394507967_comparison.png"
+                        alt="CLIP segmentation query comparison">
+                    <figcaption class="has-text-centered">Figure 13 – CLIP‑driven 3‑D semantic segmentation:
+                        candidate query sets and critic‑chosen result.</figcaption>
+                </figure>
+
+                <figure class="image is-fullwidth">
+                    <img src="static/images/appendix/ecb91f433f144a7798724890f0528b23_comparison.png"
+                        alt="Actor prompt example">
+                    <figcaption class="has-text-centered">Figure 14 – VLM actor proposal: physics ranges &amp;
+                        segmentation terms.</figcaption>
+                </figure>
+                <figure class="image is-fullwidth">
+                    <img src="static/images/appendix/vlm_code.png" alt="VLM judge system prompt">
+                    <figcaption class="has-text-centered">Figure 18 – VLM Actor's Physics and Segmentation Proposal.
+                    </figcaption>
+                </figure>
+
+                <!--  CODE VIEWER FOR PROMPTS  -->
+                <h4 class="title is-4">Dataset Creation Prompts (scrollable)</h4>
+
+                <div class="tabs is-toggle is-toggle-rounded is-small" id="dataset-prompt-tabs">
+                    <ul>
+                        <li class="is-active" data-code="objaverse"><a>Objaverse Selection</a></li>
+                        <li data-code="filter"><a>Object Filtering</a></li>
+                        <li data-code="actor"><a>VLM Actor</a></li>
+                        <li data-code="critic"><a>VLM Critic</a></li>
+                        <li data-code="incontext_toy"><a>In-Context Physics Exampels (condensed)</a></li>
+                        <li data-code="incontext_physics"><a>In-Context Physics Examples (full)</a></li>
+                    </ul>
+                </div>
+
+                <div class="code-wrapper">
+                    <pre data-code="objaverse"
+                        data-src="static/prompts/objaverse_selection.txt"><code>Loading…</code></pre>
+                    <pre data-code="filter" data-src="static/prompts/fiter_prompt.txt"
+                        class="is-hidden"><code>Loading…</code></pre>
+                    <pre data-code="actor" data-src="static/prompts/actor_prompt.txt"
+                        class="is-hidden"><code>Loading…</code></pre>
+                    <pre data-code="critic" data-src="static/prompts/critic_prompt.txt"
+                        class="is-hidden"><code>Loading…</code></pre>
+                    <pre data-code="incontext_physics" data-src="static/prompts/incontext_physics.txt"
+                        class="is-hidden"><code>Loading…</code></pre>
+                    <pre data-code="incontext_toy" data-src="static/prompts/incontext_toy.txt"
+                        class="is-hidden"><code>Loading…</code></pre>
+                </div>
+
+            </div>
+
+            <!-- ================  APPENDIX C  ================ -->
+            <div id="app-c">
+                <h3 class="title is-3">C&nbsp;&nbsp;Effects of Human Prior on SupPhysVerse</h3>
+                <p class="content is-size-5 has-text-justified">
+                    Including hand‑tuned in‑context physics examples when querying Gemini markedly
+                    improves label quality. Table 2 reports execution success (numerical stability) and realism
+                    judged by Gemini.
+                </p>
+
+                <table class="table is-striped is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Exec.&nbsp;Rate&nbsp;↑</th>
+                            <th>VLM&nbsp;(Gemini)&nbsp;↑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>+ In‑context Examples (Ours)</strong></td>
+                            <td>100.0 %</td>
+                            <td>4.83 ± 0.09</td>
+                        </tr>
+                        <tr>
+                            <td>No in‑context examples</td>
+                            <td>62.5 %</td>
+                            <td>1.34 ± 0.30</td>
+                        </tr>
+                        <tr>
+                            <td>NeRF2Physics [41]</td>
+                            <td>45.0 %</td>
+                            <td>0.99 ± 0.28</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ================  APPENDIX D  ================ -->
+
+            <!-- ================  APPENDIX D  ================ -->
+            <div id="app-d">
+                <h3 class="title is-3">D&nbsp;&nbsp;VLM as a Physics‑Realism Judge</h3>
+                <p class="content is-size-5">
+                    The evaluator is instructed to describe each animation, score physical realism on a 0–5
+                    scale, list pros/cons and suggest improvements, then pick the best candidate. The JSON
+                    schema ensures consistent automated parsing by downstream scripts.
+                </p>
+
+                <h4 class="title is-4">VLM Evaluation Prompts (scrollable)</h4>
+
+                <div class="tabs is-toggle is-toggle-rounded is-small" id="vlm-eval-tabs">
+                    <ul>
+                        <li class="is-active" data-code="vlm_eval"><a>VLM Eval</a></li>
+                    </ul>
+                </div>
+
+                <div class="code-wrapper">
+                    <pre data-code="vlm_eval" data-src="static/prompts/vlm_eval.txt"><code>Loading…</code></pre>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+        <!--  LOCAL STYLES FOR APPENDIX  -->
+        <style>
+            .code-wrapper {
+                background: #f5f5f5;
+                border-radius: 8px;
+                padding: 1rem;
+                max-height: 420px;
+                overflow: auto;
+            }
+
+            @keyframes fade {
+                from {
+                    opacity: 0
+                }
+
+                to {
+                    opacity: 1
+                }
+            }
+        </style>
+
+        <!--  TAB SWITCHER SCRIPT  -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // dataset prompt code tabs
+                document.querySelectorAll('#dataset-prompt-tabs ul li[data-code]').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tab.parentElement.querySelectorAll('li').forEach(t => t.classList.remove('is-active'));
+                        document.querySelectorAll('#app-b .code-wrapper pre').forEach(c => c.classList.add('is-hidden'));
+                        tab.classList.add('is-active');
+                        document.querySelector('#app-b .code-wrapper pre[data-code="' + tab.dataset.code + '"]').classList.remove('is-hidden');
+                    });
+                });
+
+                // vlm evaluation prompt tabs
+                document.querySelectorAll('#vlm-eval-tabs ul li[data-code]').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tab.parentElement.querySelectorAll('li').forEach(t => t.classList.remove('is-active'));
+                        document.querySelectorAll('#app-d .code-wrapper pre').forEach(c => c.classList.add('is-hidden'));
+                        tab.classList.add('is-active');
+                        document.querySelector('#app-d .code-wrapper pre[data-code="' + tab.dataset.code + '"]').classList.remove('is-hidden');
+                    });
+                });
+            });
+        </script>
+    </section>
+
+
+
+
     <!-- ──────────  AUTHORS  ────────── -->
 
 
@@ -629,7 +825,7 @@
                         if (active) active.classList.add('active');
                     }
                 });
-            }, {threshold: 0.35});
+            }, { threshold: 0.35 });
 
             sections.forEach(section => observer.observe(section));
         });
@@ -661,7 +857,7 @@
                     animating = false; // reset for next time
                     el.textContent = 0;
                 }
-            }, {threshold: 0.4});
+            }, { threshold: 0.4 });
             obs.observe(el);
         });
 
@@ -696,6 +892,26 @@
             const ic = document.getElementById('changing-icon');
             if (ic) ic.className = 'ti ' + iconClasses[ii];
         }, 1200);
+
+
+
+        // ─── Lazy‑load prompt files ──────────────────────────────
+        document
+            .querySelectorAll('.code-wrapper pre[data-src]')
+            .forEach(el => {
+                fetch(el.dataset.src)
+                    .then(r => r.text())
+                    .then(txt => {
+                        // Insert text & escape HTML (<, >, &)
+                        el.querySelector('code').textContent = txt;
+                    })
+                    .catch(err => {
+                        el.querySelector('code').textContent =
+                            '⚠️ Could not load ' + el.dataset.src;
+                        console.error(err);
+                    });
+            });
+
     </script>
 </body>
 

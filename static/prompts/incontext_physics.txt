@@ -1,0 +1,241 @@
+{
+    "tree": {
+        "class_name_for_example": "ficus tree",
+        "special_notes": "",
+        "example_material_dict": {
+            "pot": {"density": 400, "E": 2e8, "nu": 0.4, "material_id": get_material_id("rigid")},
+            "trunk": {"density": 400, "E": 2e6, "nu": 0.4, "material_id": get_material_id("elastic")},
+            "leaves": {"density": 200, "E": 2e4, "nu": 0.4, "material_id": get_material_id("elastic")}
+        },
+        "example_explanation": textwrap.dedent("""
+            For this, we assume that the pot is stationary, while the trunk and leaves are made of "elastic", which will make
+            them sway in the wind. The stiffness (Young's Modulus) of the trunk is much higher than that of the leaves.
+        """),
+        "example_all_queries": [["leaves", "trunk", "pot"], ["green", "orange", "reddish-brown"]],
+        "tips": [
+            "In a scene, typically there's a stationary part that will serve to fix the object to the ground. Usually, it's the pot, or some base of the tree. You must set the material_id of the stationary part to 6. If there's no stationary part, then never mind.",
+            "The higher the `E` is, the stiffer the object is. E.g., so tree would sway less in the wind.",
+        ]
+    },
+    "flowers": {
+        "class_name_for_example": "flowers in a vase",
+        "special_notes": "",
+        "example_material_dict": {
+            "vase": {"density": 500, "E": 1e6, "nu": 0.3, "material_id": get_material_id("rigid")},
+            "flowers": {"density": 100, "E": 1e4, "nu": 0.4, "material_id": get_material_id("elastic")}
+        },
+        "example_explanation": textwrap.dedent("""
+            Here, the vase is designated as stationary (material_id=6), indicating it should not move or sway.
+            The flowers are set to a more pliable or flexible material (like "elastic" = 0), so that they can sway
+            if there's wind or slight motion. The stiffness (Young's Modulus) of the vase is much higher than that
+            of the flowers, making the vase rigid and the flowers more flexible.
+        """),
+        "example_all_queries": [["vase", "flowers"], ["ceramic base", "petals"], ["blue vase", "pink flower"]],
+        "tips": [
+            "In a typical flower arrangement, the vase (or base) is stationary, so give that part material_id=6 if present.",
+            "The higher the `E`, the stiffer the part. So the vase should have a higher E range than the flowers.",
+        ]
+    },
+    "shrub": {
+        "class_name_for_example": "typical three-part shrub",
+        "special_notes": textwrap.dedent("""
+            **Dataset note:** Shrubs in our dataset stand by themselves—there is **no planter or base**.
+            You should therefore return only the shrub's structural parts and none of them are stationary.
+        """),
+        "example_material_dict": {
+            "stems":    { "density": 300, "E": 1e5, "nu": 0.35, "material_id": get_material_id("elastic") },
+            "twigs":    { "density": 250, "E": 6e4, "nu": 0.38, "material_id": get_material_id("elastic") },
+            "foliage":  { "density": 150, "E": 2e4, "nu": 0.40, "material_id": get_material_id("elastic") }
+        },
+        "example_explanation": textwrap.dedent("""
+            Return *ranges* instead of single values and accompany them with reasoning, Pythonic
+            constraints, and alternative query lists.
+        """),
+        "example_all_queries": [
+            ["stems", "twigs", "foliage"],
+            ["woody stems", "thin branches", "leaves"],
+            ["brown sticks", "small branches", "green leaves"]
+        ],
+        "tips": [
+            "Provide exactly the parts visible (usually stems/twigs + foliage).",
+            "1e4 <= E <= 1e6.",
+            "Stems should be stiffest > twigs > foliage.",
+            "No part uses material_id 6 because nothing is fixed to the ground.",
+        ]
+    },
+    "grass": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            **Dataset note:** Grass patches are usually isolated; occasionally a visible soil patch is
+            underneath. Include a "soil" part only if it is visible.
+        """),
+        "example_material_dict": {
+            "blades": { "density": 80, "E": 1e4, "nu": 0.45, "material_id": get_material_id("elastic") }
+        },
+        "example_explanation": textwrap.dedent("""
+            Example A (typical isolated grass—no stationary part):
+            ```json
+            {
+                "blades": { "density": 80, "E": 1e4, "nu": 0.45, "material_id": get_material_id("elastic") }
+            }
+            ```
+
+            Example B (grass with visible soil):
+            ```json
+            {
+                "soil":   { "density": 1200, "E": 5e5, "nu": 0.30, "material_id": get_material_id("rigid") },
+                "blades": { "density":  80,  "E": 1e4, "nu": 0.45, "material_id": get_material_id("elastic") }
+            }
+            ```
+            Return *ranges*, reasoning, constraints, and alternative query lists.
+        """),
+        "example_all_queries": [
+          ["blades"],
+          ["grass"],
+          ["green stalks"]
+        ],
+        "tips": [
+            "Segment only the visible parts (sometimes just \"blades\").",
+            "If *no* soil visible:\nall_queries: [[\"blades\"],[\"grass\"],[\"green stalks\"]]",
+            "If soil *is* visible:\nall_queries: [[\"soil\", \"blades\"],[\"dirt\", \"grass\"],[\"brown base\", \"green grass\"]]",
+            "1e4 <= E <= 1e6.",
+            "If soil present -> give it material_id 6 and ensure E_soil > E_blades.",
+            "If soil absent -> no stationary part; material_id 6 should not appear.",
+        ]
+    },
+    "rubber_ducks_and_toys": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            IMPORTANT: For rubber ducks and toys, we want to treat the entire object as a single part. Do not attempt to
+            segment it into multiple parts. The object should be treated as a single, bouncy rubber-like object.
+        """),
+        "example_material_dict": {
+            "toy": {"density": [80, 150], "E": [3e4, 5e4], "nu": [0.4, 0.45], "material_id": get_material_id("elastic")}
+        },
+        "example_explanation": "",
+        "example_all_queries": [["toy"], ["rubber toy"], ["yellow duck"], ["plastic toy"]],
+        "tips": [
+            "Always use material_id=0 (jelly) for bouncy rubber-like behavior",
+            "Keep E relatively low (around 1e3) for good bounce",
+            "Density should be in the range of typical rubber/plastic toys",
+            "Poisson's ratio should be around 0.35 for rubber-like behavior",
+            "Make sure all queries in all_queries list are single-part queries"
+        ]
+    },
+    "sport_balls": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            IMPORTANT: For sport balls, we want to treat the entire ball as a single part. Do not attempt to
+            segment it into multiple parts (like surface patterns or seams). The ball should be treated as a single,
+            bouncy object.
+        """),
+        "example_material_dict": {
+            "ball": {"density": [80, 150], "E": [3e4, 5e4], "nu": [0.4, 0.45], "material_id": get_material_id("elastic")}
+        },
+        "example_explanation": "",
+        "example_all_queries": [["ball"], ["sport ball"], ["basketball"], ["round ball"]],
+        "tips": [
+            "Always use material_id=0 (jelly) for bouncy behavior",
+            "Keep E relatively low (around 1e3) for good bounce",
+            "Density should be in the range of typical sport balls",
+            "Poisson's ratio should be around 0.35 for rubber-like behavior",
+            "Make sure all queries in all_queries list are single-part queries"
+        ]
+    },
+    "soda_cans": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            IMPORTANT: For soda cans, we want to treat the entire can as a single part. Do not attempt to
+            segment it into multiple parts (like the top, body, or label). The can should be treated as a single,
+            rigid metal object.
+        """),
+        "example_material_dict": {
+            "can": {"density": [2600, 2800], "E": [5e10, 8e10], "nu": [0.25, 0.35], "material_id": get_material_id("metal")}
+        },
+        "example_explanation": "",
+        "example_all_queries": [["can"], ["soda can"], ["aluminum can"], ["metal can"]],
+        "tips": [
+            "Always use material_id=1 (metal) for rigid metal behavior",
+            "Keep E relatively high (around 1e8) for metal stiffness",
+            "Density should be in the range of typical aluminum (around 2700 kg/m³)",
+            "Poisson's ratio should be around 0.3 for metal behavior",
+            "Make sure all queries in all_queries list are single-part queries"
+        ]
+    },
+    "metal_crates": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            IMPORTANT: For metal crates, we want to treat the entire crate as a single part. Do not attempt to
+            segment it into multiple parts (like the sides, top, or bottom). The crate should be treated as a single,
+            rigid metal object.
+        """),
+        "example_material_dict": {
+            "crate": {"density": [2500, 2900], "E": [8e7, 1.2e8], "nu": [0.25, 0.35], "material_id": get_material_id("metal")}
+        },
+        "example_explanation": "",
+        "example_all_queries": [["crate"], ["metal crate"], ["metal box"], ["steel crate"]],
+        "tips": [
+            "Always use material_id=1 (metal) for rigid metal behavior",
+            "Keep E relatively high (around 1e8) for metal stiffness",
+            "Density should be in the range of typical metal (around 2700 kg/m³)",
+            "Poisson's ratio should be around 0.3 for metal behavior",
+            "Make sure all queries in all_queries list are single-part queries"
+        ]
+    },
+    "sand": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            IMPORTANT: For sand objects, we want to treat the entire object as a single part. Do not attempt to
+            segment it into multiple parts. The sand should be treated as a single, granular material.
+        """),
+        "example_material_dict": {
+            "sand": {"density": [1800, 2200], "E": [4e7, 6e7], "nu": [0.25, 0.35], "material_id": get_material_id("sand")}
+        },
+        "example_explanation": "",
+        "example_all_queries": [["sand"], ["sand pile"], ["sand mound"], ["granular material"]],
+        "tips": [
+            "Always use material_id=2 (sand) for granular behavior",
+            "Keep E relatively high (around 5e7) for sand stiffness",
+            "Density should be in the range of typical sand (around 2000 kg/m³)",
+            "Poisson's ratio should be around 0.3 for sand behavior",
+            "Make sure all queries in all_queries list are single-part queries"
+        ]
+    },
+    "jello_block": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            IMPORTANT: For jello blocks, we want to treat the entire object as a single part. Do not attempt to
+            segment it into multiple parts. The jello block should be treated as a single, soft, bouncy object.
+        """),
+        "example_material_dict": {
+            "jello": {"density": [40, 60], "E": [800, 1200], "nu": [0.25, 0.35], "material_id": get_material_id("elastic")}
+        },
+        "example_explanation": "",
+        "example_all_queries": [["jello"], ["jello block"], ["gelatin"], ["bouncy block"]],
+        "tips": [
+            "Always use material_id=0 (jelly) for soft, bouncy behavior",
+            "Keep E relatively low (around 1000) for good bounce and jiggle",
+            "Density should be in the range of typical jello (around 50 kg/m³)",
+            "Poisson's ratio should be around 0.3 for jello-like behavior",
+            "Make sure all queries in all_queries list are single-part queries"
+        ]
+    },
+    "snow_and_mud": {
+        "class_name_for_example": "",
+        "special_notes": textwrap.dedent("""
+            IMPORTANT: For combined snow & mud objects, we treat the entire mixture as a single deformable part.  Do **not**
+            attempt to split it into separate snow and mud regions—the simulation will use one MPM material.
+        """),
+        "example_material_dict": {
+            "snow_and_mud": {"density": [2000, 3000], "E": [8e4, 1.2e5], "nu": [0.15, 0.25], "material_id": get_material_id("snow")}
+        },
+        "example_explanation": "",
+        "example_all_queries": [["snow and mud"], ["slush"], ["muddy snow"], ["wet snow"]],
+        "tips": [
+            "Always set material_id = 5 (snow) so the simulator uses the appropriate elasto-plastic snow model.",
+            "Keep E around 1e5 (the config value) to match the intended softness.",
+            "Density is markedly higher than fluffy snow because of the mud/water content—use roughly 2–3 g/cm³ (2000–3000 kg/m³).",
+            "Make sure every list in `all_queries` contains **one** phrase because this is a single-part object."
+        ]
+    }
+}

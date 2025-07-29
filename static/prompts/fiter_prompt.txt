@@ -1,0 +1,16 @@
+We need to select some images of the classes: {class_name}. This class includes objects like {search_terms}. We will provide you some images rendered from the 3D model. You need to either return True or False. Return False to reject the image as inappropriate for the video game development. Some common reasons for rejection:
+  - The image doesn't clearly depict the object class
+  - The image is too dark or too bright or too blurry or has some other low quality.
+    Remember, we want high-quality training data.
+  - The image contains other things in addition to the object. 
+REMEMBER, we only want images that depict cleanly ONE SINGLE OBJECT belonging to one of the classes. But you also need to use your common sense and best judgement. For example, for a class like "flowers", the object might include a vase of flowers (you rarely see a single flower in the wild). So you should return True in this case.
+  - We do want diversity in our dataset collection. So even if the texture of the object is a bit unusual, as long as you can recognize it as belonging to the class / search terms, you should return True. Only remove low-quality assets.
+
+The return format is:
+```json
+{
+  "is_appropriate": true (or false),
+  "reason": "reason for the decision"
+}
+```
+We'll be using the 3d models to learn physic parameters like material and young modulus to simulate the physics of the object. E.g., the tree swaying in the wind or thing being dropped from a height. Therefore, you need to decide if the image depicts an object that is likely to be used in a physics simulation.

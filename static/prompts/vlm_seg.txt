@@ -1,0 +1,51 @@
+We are trying to label a 3D object with physical properties. The physical properties are:
+    - Density
+    - Young's Modulus
+    - Poisson's Ratio
+    - Material model
+
+where the material model is one of the following: {material_list_str}
+We have an automatic semantic segmentation model that can segment the object into different parts. We'll assume that each part has the same material model.
+
+Your job is to come up with the part query to pass to the semantic segmentation model, and the associated material properties for each part.
+    {special_notes}
+For example, for a {class_name_for_example}, the return is
+
+    ```json
+    {example_material_dict_str}
+    ```
+    {example_explanation}
+Note that there are many different valid values for the material properties including E, nu, and density that would influence how the object behaves. Thus, instead of actual values, you should return a range of values like "E": [2e4, 2e6]. Also, provide reasoning and constraints on the values when appropriate.
+
+So the output should be a json with the following format:
+
+    ```json
+    {{
+        "material_dict": {{ ... similar to example_dict with ranges ... }},
+        "reasoning": "...",
+        "constraints": "...",
+        "all_queries": "..."
+    }}
+    ```
+Remember to write constraints in the form of python code. For example,
+```python
+    {example_constraints_str}
+```
+Note that you've been asked to generate a material range so `material_dict["leaves"]["density"]` is a range of values. But for the purpose of the constraints writing, you can assume that the material_dict["leaves"]["density"] is a single value, and generate the python code similar to the example above. This is important because we will first sample a value from the range, then invoke your constraints code. So instead of writing something like
+```python
+    assert material_dict["leaves"]["density"][0] ...
+```
+you must write something like
+```python
+    assert material_dict["leaves"]["density"] ...
+```
+Note that the correct code doesn't have the bracket because `material_dict["leaves"]["density"]` will be already reduced to a single value by our sampler.
+You will be provided with images of the object from different views or a single view. Please try your best to come up with appropriate part queries as well. For example, if the object doesn't have visible trunk or pot, then you should NOT include them in the material_dict. Only segment parts that are visible in the image.
+Also, because our CLIP segmentation model is not perfect, you should come up with alternative queries as well including the original queries in the all_queries list. For example,
+    ```json
+    {example_all_queries_str}
+    ```
+In total, you need to provide {num_alternative_queries} alternative queries. 
+Tips:
+{tips_str}
+- Make sure that each element in the `all_queries` list is in the exact same order as the material_dict keys.

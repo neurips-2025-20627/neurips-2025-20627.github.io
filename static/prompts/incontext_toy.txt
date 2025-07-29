@@ -1,0 +1,38 @@
+tree: 
+  pot: {density: 400, E: 2e8, nu: 0.4, material: "rigid"}
+  trunk: {density: 400, E: 2e6, nu: 0.4, material: "elastic"}
+  leaves: {density: 200, E: 2e4, nu: 0.4, material: "elastic"}
+
+flowers:
+  vase: {density: 500, E: 1e6, nu: 0.3, material: "rigid"}
+  flowers: {density: 100, E: 1e4, nu: 0.4, material: "elastic"}
+
+shrub:
+  stems: {density: 300, E: 1e5, nu: 0.35, material: "elastic"}
+  twigs: {density: 250, E: 6e4, nu: 0.38, material: "elastic"}
+  foliage: {density: 150, E: 2e4, nu: 0.40, material: "elastic"}
+
+grass:
+  blades: {density: 80, E: 1e4, nu: 0.45, material: "elastic"}
+  soil (if visible): {density: 1200, E: 5e5, nu: 0.30, material: "rigid"}
+
+rubber_ducks_and_toys:
+  toy: {density: [80, 150], E: [3e4, 5e4], nu: [0.4, 0.45], material: "elastic"}
+
+sport_balls:
+  ball: {density: [80, 150], E: [3e4, 5e4], nu: [0.4, 0.45], material: "elastic"}
+
+soda_cans:
+  can: {density: [2600, 2800], E: [5e10, 8e10], nu: [0.25, 0.35], material: "metal"}
+
+metal_crates:
+  crate: {density: [2500, 2900], E: [8e7, 1.2e8], nu: [0.25, 0.35], material: "metal"}
+
+sand:
+  sand: {density: [1800, 2200], E: [4e7, 6e7], nu: [0.25, 0.35], material: "sand"}
+
+jello_block:
+  jello: {density: [40, 60], E: [800, 1200], nu: [0.25, 0.35], material: "elastic"}
+
+snow_and_mud:
+  snow_and_mud: {density: [2000, 3000], E: [8e4, 1.2e5], nu: [0.15, 0.25], material: "snow"}

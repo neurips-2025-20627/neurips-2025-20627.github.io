@@ -1,0 +1,10 @@
+ tree : tree, ficus, fern, oak tree, pine tree, evergreen, palm tree, maple tree, bonsai tree
+ flowers : flower, bouquet, rose, tulip, daisy, lily, sunflower, orchid, flower arrangement, flowering plant, garden flowers, wildflowers, floral
+ rubber\_ducks\_and\_toys : rubber duck, bath toy, rubber toy, toy duck, squeaky toy, floating toy, plastic duck, children's bath toy, yellow duck toy, rubber animal toy
+ soda\_cans : soda can, aluminum can, beverage can, cola can, soft drink can, metal can, canned drink, pop can, fizzy drink can
+ sport\_balls : basketball, soccer ball, football, tennis ball, baseball, volleyball, golf ball, rugby ball, ping pong ball, cricket ball, bowling ball, beach ball, sports ball
+ sand : sand, beach sand, desert sand, sandy terrain, sand pile, sand dune, sandpit, sand box, sand texture, grainy sand
+ shrubs : shrub, bush, hedge, ornamental bush, garden shrub, boxwood, flowering bush, evergreen shrub, decorative plant, landscaping shrub
+ metal\_crates : metal crate, steel box, metal container, shipping crate, metal storage box, industrial container, metal chest, storage crate, metallic box
+ grass : grass, lawn, turf, grassland, meadow, grassy field, green grass, grass patch, tall grass, wild grass, pasture
+ snow\_and\_mud : snow, mud, snowy ground, muddy ground, wet mud, fresh snow, packed snow, snowy terrain, muddy terrain, snow patch, mud puddle, snowdrift, muddy path, snowy surface, muddy surface, slush, wet snow, dirty snow, muddy water, snowy landscape
